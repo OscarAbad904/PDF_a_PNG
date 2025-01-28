@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Test del Sistema Solar para Paula</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #f0f8ff 0%, #e6f7ff 100%);
+      margin: 0;
+      padding: 0;
+    }
+    header, footer {
+      background-color: #4b8ba1;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+    main {
+      width: 90%;
+      max-width: 700px;
+      margin: 1rem auto;
+      background-color: #ffffffcc;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
+    }
+    h1 {
+      margin: 0;
+    }
+    .question-container {
+      margin-bottom: 1rem;
+      background: #fafafa;
+      padding: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+    .question {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    .options label {
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+    .reference {
+      font-size: 0.85rem;
+      color: #555;
+      margin-top: 0.5rem;
+    }
+    button {
+      margin-top: 1rem;
+      background-color: #4b8ba1;
+      color: #fff;
+      padding: 0.7rem 1.2rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #3a6f7d;
+    }
+    /* Resaltado de respuestas */
+    .correct {
+      color: green;
+      font-weight: bold;
+    }
+    .incorrect {
+      color: red;
+      font-weight: bold;
+    }
+    #result {
+      margin-top: 2rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Test del Sistema Solar para Paula</h1>
+  </header>
+
+  <main>
+    <p>
+      ¡Hola Paula! Responde con tranquilidad cada pregunta. 
+      Al finalizar, pulsa <strong>“Evaluar”</strong> para ver tus aciertos y errores.
+    </p>
+
+    <div id="quizContainer"></div>
+    
+    <button onclick="calificar()">Evaluar</button>
+    <div id="result"></div>
+  </main>
+
+  <footer>
+    <p>¡Ánimo y mucha suerte!</p>
+  </footer>
+
+  <script>
+    // Array con las 20 preguntas originales, adaptadas al estilo "compacto"
+    const questions = [
+      {
+        question: "1. ¿Cuál es el planeta más cercano al Sol?",
+        options: ["Marte", "Júpiter", "Mercurio", "Saturno", "Venus"],
+        answer: "Mercurio",
+        reference: "Página 1"
+      },
+      {
+        question: "2. ¿Qué es una galaxia?",
+        options: [
+          "Un conjunto de satélites",
+          "Un agujero negro pequeño",
+          "Un anillo de meteoritos",
+          "Un grupo de muchísimas estrellas",
+          "Un solo planeta gigante"
+        ],
+        answer: "Un grupo de muchísimas estrellas",
+        reference: "Página 2"
+      },
+      {
+        question: "3. ¿Cuál de estos astros produce luz propia?",
+        options: ["El Sol", "La Luna", "La Tierra", "Marte", "Urano"],
+        answer: "El Sol",
+        reference: "Página 2"
+      },
+      {
+        question: "4. ¿Qué planeta se conoce como el “Planeta Rojo”?",
+        options: ["Neptuno", "Tierra", "Urano", "Marte", "Plutón"],
+        answer: "Marte",
+        reference: "Página 3"
+      },
+      {
+        question: "5. ¿Cuántos planetas se suelen considerar en el Sistema Solar (contando a Plutón)?",
+        options: ["7", "9", "6", "10", "11"],
+        answer: "9",
+        reference: "Página 4"
+      },
+      {
+        question: "6. ¿Cuál de los siguientes NO es un planeta?",
+        options: ["Júpiter", "Saturno", "Neptuno", "Cometa Halley", "Marte"],
+        answer: "Cometa Halley",
+        reference: "Página 5"
+      },
+      {
+        question: "7. ¿Cuál es el satélite natural de la Tierra?",
+        options: ["Luna", "Titán", "Europa", "Ganímedes", "Fobos"],
+        answer: "Luna",
+        reference: "Página 5"
+      },
+      {
+        question: "8. ¿En qué galaxia nos encontramos?",
+        options: [
+          "Andrómeda",
+          "Vía Láctea",
+          "Galaxia del Triángulo",
+          "M87",
+          "Pequeña Nube de Magallanes"
+        ],
+        answer: "Vía Láctea",
+        reference: "Página 6"
+      },
+      {
+        question: "9. ¿Cuál es el segundo planeta más cercano al Sol?",
+        options: ["Urano", "Mercurio", "Venus", "Neptuno", "Júpiter"],
+        answer: "Venus",
+        reference: "Página 6"
+      },
+      {
+        question: "10. ¿Cuál de estos planetas es gaseoso?",
+        options: ["Marte", "Júpiter", "Mercurio", "Venus", "Tierra"],
+        answer: "Júpiter",
+        reference: "Página 7"
+      },
+      {
+        question: "11. ¿Qué nombre recibe la estrella más cercana a la Tierra?",
+        options: [
+          "La Luna", 
+          "Proxima Centauri",
+          "El Sol", 
+          "Sirio", 
+          "Alfa Centauri"
+        ],
+        answer: "El Sol",
+        reference: "Página 8"
+      },
+      {
+        question: "12. ¿Qué planeta es famoso por sus grandes anillos?",
+        options: ["Saturno", "Urano", "Neptuno", "Júpiter", "Plutón"],
+        answer: "Saturno",
+        reference: "Página 8"
+      },
+      {
+        question: "13. ¿Cuál de los siguientes astros gira alrededor de un planeta?",
+        options: [
+          "Un satélite natural",
+          "Una galaxia",
+          "Una estrella",
+          "Un cometa",
+          "Un asteroide"
+        ],
+        answer: "Un satélite natural",
+        reference: "Página 9"
+      },
+      {
+        question: "14. ¿Qué tipo de superficie tienen los planetas interiores, como la Tierra?",
+        options: ["Gaseosa", "Rocosa", "Líquida", "Helada", "No tienen superficie"],
+        answer: "Rocosa",
+        reference: "Página 9"
+      },
+      {
+        question: "15. ¿Cuál de estos NO es considerado un planeta interior?",
+        options: ["Mercurio", "Venus", "Marte", "Júpiter", "Tierra"],
+        answer: "Júpiter",
+        reference: "Página 9"
+      },
+      {
+        question: "16. ¿Cuál es el planeta más grande del Sistema Solar?",
+        options: ["La Tierra", "Urano", "Saturno", "Neptuno", "Júpiter"],
+        answer: "Júpiter",
+        reference: "Página 10"
+      },
+      {
+        question: "17. ¿Cuál de estos NO gira alrededor del Sol?",
+        options: [
+          "Asteroides",
+          "Planetas",
+          "Estrellas",
+          "Cometas",
+          "Planetas enanos"
+        ],
+        answer: "Estrellas",
+        reference: "Página 10"
+      },
+      {
+        question: "18. ¿Qué nombre se le da al cuarto planeta desde el Sol?",
+        options: ["Marte", "Júpiter", "Tierra", "Plutón", "Venus"],
+        answer: "Marte",
+        reference: "Página 11"
+      },
+      {
+        question: "19. ¿Cómo se llama nuestra galaxia?",
+        options: ["Andrómeda", "NGC 1300", "Vía Láctea", "Gran Nube de Magallanes", "M101"],
+        answer: "Vía Láctea",
+        reference: "Página 11"
+      },
+      {
+        question: "20. ¿Qué es un “satélite natural”?",
+        options: [
+          "Un planeta que produce luz propia",
+          "Un cuerpo que gira alrededor de una galaxia",
+          "Un cuerpo pequeño que gira alrededor de un planeta",
+          "Una estrella enana",
+          "Un asteroide gigante"
+        ],
+        answer: "Un cuerpo pequeño que gira alrededor de un planeta",
+        reference: "Página 12"
+      }
+    ];
+
+    // Generar el formulario de preguntas
+    function createQuiz() {
+      const quizContainer = document.getElementById("quizContainer");
+      
+      questions.forEach((q, index) => {
+        const questionDiv = document.createElement("div");
+        questionDiv.className = "question-container";
+
+        // Título de la pregunta
+        const questionP = document.createElement("p");
+        questionP.className = "question";
+        questionP.textContent = q.question;
+        questionDiv.appendChild(questionP);
+
+        // Opciones
+        const optionsDiv = document.createElement("div");
+        optionsDiv.className = "options";
+        
+        q.options.forEach(opt => {
+          const label = document.createElement("label");
+          const radio = document.createElement("input");
+          radio.type = "radio";
+          radio.name = "q" + (index + 1);
+          radio.value = opt;
+          label.appendChild(radio);
+          label.appendChild(document.createTextNode(opt));
+          optionsDiv.appendChild(label);
+        });
+        
+        questionDiv.appendChild(optionsDiv);
+
+        // Referencia
+        const refP = document.createElement("p");
+        refP.className = "reference";
+        refP.textContent = "Referencia: " + q.reference;
+        questionDiv.appendChild(refP);
+
+        quizContainer.appendChild(questionDiv);
+      });
+    }
+
+    // Función para calificar
+    function calificar() {
+      let aciertos = 0;
+
+      // Limpia marcados previos
+      const labels = document.querySelectorAll(".options label");
+      labels.forEach(l => {
+        l.classList.remove("correct", "incorrect");
+      });
+
+      questions.forEach((q, index) => {
+        const radios = document.getElementsByName("q" + (index + 1));
+        let selected = null;
+
+        // Averigua la respuesta marcada
+        for (let r of radios) {
+          if (r.checked) {
+            selected = r.value;
+            break;
+          }
+        }
+
+        // Marca la correcta e incorrecta
+        radios.forEach(radio => {
+          if (radio.value === q.answer) {
+            // Respuesta correcta -> marcar en verde
+            radio.parentNode.classList.add("correct");
+          }
+        });
+
+        // Si coincide la selección con la respuesta, suma acierto
+        if (selected === q.answer) {
+          aciertos++;
+        } else if (selected) {
+          // Marca la seleccionada como incorrecta
+          for (let r of radios) {
+            if (r.value === selected) {
+              r.parentNode.classList.add("incorrect");
+            }
+          }
+        }
+      });
+
+      // Muestra resultado
+      const nota = (aciertos / questions.length) * 10;
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = `
+        Has acertado <strong>${aciertos}</strong> de ${questions.length} preguntas.<br/>
+        Tu nota es: <strong>${nota.toFixed(2)}</strong> sobre 10.
+      `;
+    }
+
+    // Llamada inicial para generar el test
+    createQuiz();
+  </script>
+</body>
+</html>
