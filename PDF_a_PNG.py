@@ -2,7 +2,7 @@ import sys
 import os
 from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
 from PyQt6 import uic
-import fitz  # PyMuPDF
+import fitz
 
 class PDFtoImagesApp(QMainWindow):
     def __init__(self):

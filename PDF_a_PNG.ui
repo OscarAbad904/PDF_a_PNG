@@ -6,96 +6,71 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>480</width>
-    <height>220</height>
+    <width>600</width>
+    <height>120</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>600</width>
+    <height>120</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>600</width>
+    <height>120</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>PDF a Imágenes</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-
-   <!-- Botón para seleccionar PDF -->
-   <widget class="QPushButton" name="btnSeleccionarPDF">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>30</y>
-      <width>131</width>
-      <height>31</height>
-     </rect>
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>9</number>
     </property>
-    <property name="text">
-     <string>Seleccionar PDF</string>
+    <property name="topMargin">
+     <number>9</number>
     </property>
-   </widget>
-
-   <!-- LineEdit para mostrar ruta PDF seleccionada -->
-   <widget class="QLineEdit" name="leRutaPDF">
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>30</y>
-      <width>291</width>
-      <height>31</height>
-     </rect>
+    <property name="rightMargin">
+     <number>9</number>
     </property>
-   </widget>
-
-   <!-- Botón para seleccionar carpeta de salida -->
-   <widget class="QPushButton" name="btnSeleccionarCarpeta">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>80</y>
-      <width>131</width>
-      <height>31</height>
-     </rect>
+    <property name="bottomMargin">
+     <number>9</number>
     </property>
-    <property name="text">
-     <string>Seleccionar Carpeta</string>
+    <property name="spacing">
+     <number>6</number>
     </property>
-   </widget>
-
-   <!-- LineEdit para mostrar ruta de carpeta de salida seleccionada -->
-   <widget class="QLineEdit" name="leRutaCarpeta">
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>80</y>
-      <width>291</width>
-      <height>31</height>
-     </rect>
-    </property>
-   </widget>
-
-   <!-- Botón para procesar el PDF y generar las imágenes -->
-   <widget class="QPushButton" name="btnProcesar">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>130</y>
-      <width>431</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Procesar PDF</string>
-    </property>
-   </widget>
-
+    <item row="0" column="0">
+     <widget class="QPushButton" name="btnSeleccionarPDF">
+      <property name="text">
+       <string>Seleccionar PDF</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="leRutaPDF"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QPushButton" name="btnSeleccionarCarpeta">
+      <property name="text">
+       <string>Seleccionar Carpeta</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="leRutaCarpeta"/>
+    </item>
+    <item row="2" column="0" colspan="2">
+     <widget class="QPushButton" name="btnProcesar">
+      <property name="text">
+       <string>Procesar PDF</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>480</width>
-     <height>22</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>
