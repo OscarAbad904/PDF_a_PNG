@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Menú de Actividades Musicales</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background-color: #E0F7FA;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: rgba(0, 150, 136, 0.8);
+      color: #FFFFFF;
+      text-align: center;
+      padding: 20px 0;
+      margin-bottom: 20px;
+      width: 100%;
+    }
+
+    header h1 {
+      color: #FFFFFF;
+      font-size: 2.5em;
+      margin-bottom: 5px;
+      text-shadow: 2px 2px 3px rgba(0,0,0,0.2);
+    }
+
+    header p {
+      font-size: 1.2em;
+      margin-top: 0;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .menu {
+      margin-bottom: 30px;
+      display: flex;
+      flex-direction: column; /* Changed to column for better menu layout */
+      align-items: center; /* Center items in column */
+      gap: 20px; /* Increased gap for better spacing */
+    }
+
+    .menu button {
+      padding: 15px 30px; /* Increased padding for larger buttons */
+      font-size: 1.5em; /* Increased font size */
+      margin: 0;
+      border: none;
+      border-radius: 30px;
+      background-color: #FFB74D;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 5px 7px rgba(0,0,0,0.3); /* Increased shadow for depth */
+      transition: transform 0.3s, background-color 0.3s;
+    }
+
+    .menu button:hover {
+      transform: scale(1.08); /* Slightly larger scale on hover */
+      background-color: #FFA726;
+    }
+
+    .exercise-container {
+      display: none;
+      margin: 20px auto;
+      max-width: 90%;
+      width: 90%;
+      background-color: rgba(255, 255, 255, 0.55);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.15);
+      overflow-y: auto;
+    }
+
+    /* --- Styles for Test --- */
+    #test-container {
+      background-image: url('guitarra-test.png'); /* Reemplazar con la imagen del test */
+      background-repeat: repeat-y;
+      background-position: center top;
+      color: #333;
+      background-size: 100% auto;
+    }
+    #test-container main {
+      width: 90%;
+      max-width: 90%;
+      margin: 2rem auto;
+      background-color: rgba(255, 255, 255, 0);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.15);
+    }
+    #test-container h1 {
+      margin: 0 0 1.5rem 0;
+      font-size: 3em;
+      text-shadow: 2px 2px 3px rgba(0,0,0,0.2);
+      color: #00796B;
+    }
+    #test-container p {
+      font-size: 1.3em;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+      color: #555;
+    }
+    #test-container .question-container {
+      margin-bottom: 1.5rem;
+      background: #FFFDE7;
+      padding: 1.5rem;
+      border-radius: 20px;
+      border: 4px dashed #FFC107;
+    }
+    #test-container .question {
+      font-weight: bold;
+      margin-bottom: 0.8rem;
+      color: #00796B;
+      font-size: 1.2rem;
+    }
+    #test-container .options label {
+      display: block;
+      margin-bottom: 0.8rem;
+      font-size: 1.1rem;
+      line-height: 1.5;
+      color: #444;
+    }
+    #test-container .reference {
+      font-size: 0.9rem;
+      color: #7B1FA2;
+      margin-top: 1rem;
+      font-style: italic;
+    }
+    #test-container button {
+      margin-top: 3rem;
+      background-color: #FFB74D;
+      color: white;
+      padding: 1.4rem 3rem;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 1.6rem;
+      transition: transform 0.3s, background-color 0.3s;
+      box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+    }
+    #test-container button:hover {
+      transform: scale(1.05);
+      background-color: #FFA726;
+    }
+    #test-container .correct {
+      color: #43A047 !important;
+      font-weight: bold;
+    }
+    #test-container .incorrect {
+      color: #E53935 !important;
+      font-weight: bold;
+    }
+    #test-container #resultTest {
+      margin-top: 3rem;
+      font-size: 1.7rem;
+      color: #0288D1;
+      text-align: center;
+    }
+    #test-container input[type="radio"] {
+      accent-color: #FF9800;
+      transform: scale(1.3);
+      margin-right: 10px;
+    }
+
+    /* --- Styles for Puzzle --- */
+    #puzzle-container {
+      background-image: url('guitarra-parejas.png'); /* Reemplazar con la imagen del puzzle */
+      background-repeat: repeat-y;
+      background-position: center top;
+      color: #333;
+      background-size: 100% auto;
+    }
+    #puzzle-container main {
+      width: 90%;
+      max-width: 90%;
+      margin: 2rem auto;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.15);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-auto-rows: auto;
+      gap: 3rem;
+      overflow-y: auto;
+    }
+    @media (min-width: 700px) {
+      #puzzle-container main {
+        flex-direction: row;
+        align-items: stretch; /* Mantiene la misma altura en pantallas grandes */
+        justify-content: space-around;
+      }
+    }
+    #puzzle-container h1 {
+      margin: 0 0 1.5rem 0;
+      font-size: 3em;
+      text-shadow: 2px 2px 3px rgba(0,0,0,0.2);
+      text-align: center;
+      color: #00796B;
+    }
+    #puzzle-container p {
+      font-size: 1.3em;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+      text-align: center;
+      color: #555;
+    }
+    #puzzle-container .header-section {
+      grid-column: 1 / -1;
+      margin-bottom: 3rem;
+    }
+    #puzzle-container .reset-button {
+      grid-column: 1 / -1;
+      justify-self: center;
+      margin: 2rem 0;
+    }
+    #puzzle-container #resultPuzzle {
+      grid-column: 1 / -1;
+      margin: 2rem 0;
+    }
+    #puzzle-container .column {
+      display: grid;
+      grid-template-rows: auto repeat(5, 1fr);
+      gap: 3rem;
+    }
+    #puzzle-container .column h2 {
+      margin: 0 0 1rem 0;
+    }
+    #puzzle-container .item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 80%;
+      min-height: 80px;
+      margin: 0;
+      background: #FFFDE7;
+      padding: 0.5rem;
+      border-radius: 15px;
+      border: 3px solid #FFC107;
+      font-size: 1.2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.3s, border-color 0.3s, transform 0.2s;
+    }
+    #puzzle-container .item:hover {
+      background-color: #FFE0B2;
+      transform: scale(1.03);
+    }
+    #puzzle-container .item.selected {
+      border-color: #4CAF50;
+      background-color: #E8F5E9;
+      transform: scale(1.05);
+    }
+    #puzzle-container .item.matched {
+      background-color: #C8E6C9;
+      border-color: #388E3C;
+      opacity: 0.7;
+      text-decoration: line-through;
+      cursor: default;
+      pointer-events: none;
+    }
+    #puzzle-container .item.incorrect-match {
+      background-color: #FFCDD2;
+      border-color: #F44336;
+    }
+    #puzzle-container button {
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      background-color: #FFB74D;
+      color: white;
+      padding: 1.3rem 2.8rem;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 1.4rem;
+      transition: transform 0.3s, background-color 0.3s;
+      box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+      align-self: center;
+    }
+    #puzzle-container button:hover {
+      transform: scale(1.05);
+      background-color: #FFA726;
+    }
+    #puzzle-container #resultPuzzle {
+      grid-column: 1 / -1;
+      margin: 1rem 0;
+    }
+
+    footer {
+      background-color: rgba(0, 150, 136, 0.8);
+      color: #FFFFFF;
+      text-align: center;
+      padding: 15px 0;
+      margin-top: 20px;
+      width: 100%;
+    }
+
+    footer p {
+      font-size: 1.1em;
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>¡Aprende sobre Guitarra y Música!</h1>
+    <p>¡Selecciona una actividad para empezar! 🎸🎶</p>
+  </header>
+
+  <main>
+    <div class="menu" id="menu">
+      <button onclick="showExercise('test')">Realizar Test</button>
+      <button onclick="showExercise('puzzle')">Jugar a Parejas</button>
+    </div>
+
+    <div id="test-container" class="exercise-container">
+      <main>
+        <h1>Test de Guitarra y Música</h1>
+        <p>
+          ¡Hola Paula! Responde estas preguntas sobre guitarras y música.
+          Al final, pulsa <strong>"Evaluar"</strong> para ver tus resultados. ¡A por ello! ✨
+        </p>
+
+        <div id="quizContainer"></div>
+
+        <button onclick="calificarTest()">Evaluar</button>
+        <div id="resultTest"></div>
+      </main>
+    </div>
+
+    <div id="puzzle-container" class="exercise-container">
+      <main>
+        <div class="header-section">
+          <h1>Juego de Parejas Musicales</h1>
+          <p>
+            ¡Hola Paula! Haz clic en un término musical y luego en su descripción correcta para unirlos.
+            ¡Intenta hacer todas las parejas! ¡Demuestra lo que sabes de música! ✨
+          </p>
+        </div>
+
+        <button class="reset-button" onclick="resetPuzzleGame()">Reiniciar Juego</button>
+        <div id="resultPuzzle"></div>
+
+        <div class="column parts-column">
+          <h2>Términos Musicales</h2>
+          <div class="item part-item" data-part="Clavijero">Clavijero</div>
+          <div class="item part-item" data-part="Cuerdas">Cuerdas</div>
+          <div class="item part-item" data-part="Diapasón">Diapasón</div>
+          <div class="item part-item" data-part="Puente">Puente</div>
+          <div class="item part-item" data-part="Caja de Resonancia">Caja de Resonancia</div>
+        </div>
+
+        <div class="column functions-column" id="functionsColumn">
+          <h2>Descripciones</h2>
+          <div class="item function-item" data-function="Parte donde se ajustan las cuerdas para cambiar su tensión y afinar la guitarra.">Parte donde se ajustan las cuerdas para cambiar su tensión y afinar la guitarra.</div>
+          <div class="item function-item" data-function="Vibran para producir el sonido en la guitarra. Hechas de metal o nylon.">Vibran para producir el sonido en la guitarra. Hechas de metal o nylon.</div>
+          <div class="item function-item" data-function="Superficie plana sobre el mástil donde se presionan las cuerdas para cambiar la nota.">Superficie plana sobre el mástil donde se presionan las cuerdas para cambiar la nota.</div>
+          <div class="item function-item" data-function="Sujeta las cuerdas al cuerpo de la guitarra y transmite su vibración.">Sujeta las cuerdas al cuerpo de la guitarra y transmite su vibración.</div>
+          <div class="item function-item" data-function="Cuerpo hueco de la guitarra acústica que amplifica el sonido de las cuerdas.">Cuerpo hueco de la guitarra acústica que amplifica el sonido de las cuerdas.</div>
+        </div>
+      </main>
+    </div>
+  </main>
+
+  <footer>
+    <p>🎸🎶 ¡Explora el mundo de la música y sigue aprendiendo! 🎼🎤</p>
+  </footer>
+
+  <script>
+    // --- Variables y funciones para el Test ---
+    const testQuestions = [
+      {
+        question: "¿Qué parte de la guitarra se utiliza para afinar las cuerdas?",
+        options: ["El puente", "El mástil", "El clavijero", "La cejuela", "La boca"],
+        answer: "El clavijero",
+        reference: "Imagen 1.png"
+      },
+      {
+        question: "¿De qué material suelen estar hechas las cuerdas de una guitarra acústica?",
+        options: ["Nylon", "Acero", "Seda", "Madera", "Plástico"],
+        answer: "Acero",
+        reference: "Imagen 2.png"
+      },
+      {
+        question: "¿Cómo se llama la parte plana del mástil donde se presionan las cuerdas?",
+        options: ["Cuerpo", "Pala", "Diapasón", "Cejuela", "Trastes"],
+        answer: "Diapasón",
+        reference: "Imagen 3.png"
+      },
+      {
+        question: "¿Cuál es la función principal del puente de la guitarra?",
+        options: ["Afinar las cuerdas", "Amplificar el sonido", "Sujetar las cuerdas al cuerpo", "Decorar la guitarra", "Proteger las cuerdas"],
+        answer: "Sujetar las cuerdas al cuerpo",
+        reference: "Imagen 4.png"
+      },
+      {
+        question: "¿Qué tipo de guitarra utiliza una caja de resonancia para amplificar el sonido de forma natural?",
+        options: ["Eléctrica", "Electroacústica", "Clásica", "Acústica", "Todas"],
+        answer: "Acústica",
+        reference: "Imagen 5.png"
+      },
+      {
+        question: "¿Qué son los 'trastes' en el diapasón de una guitarra?",
+        options: ["Adornos", "Barras metálicas", "Marcadores de posición", "Cuerdas finas", "Piezas decorativas"],
+        answer: "Barras metálicas",
+        reference: "Imagen 6.png"
+      },
+      {
+        question: "¿Qué parte de la guitarra se encarga de transmitir la vibración de las cuerdas al cuerpo?",
+        options: ["Clavijero", "Mástil", "Puente", "Diapasón", "Cejuela"],
+        answer: "Puente",
+        reference: "Imagen 7.png"
+      },
+      {
+        question: "¿Cómo se llama el agujero grande en el cuerpo de una guitarra acústica?",
+        options: ["Clavijero", "Boca", "Diapasón", "Puente", "Tapa armónica"],
+        answer: "Boca",
+        reference: "Imagen 8.png"
+      },
+      {
+        question: "¿Qué tipo de cuerdas se utilizan comúnmente en guitarras clásicas o españolas?",
+        options: ["Acero", "Bronce", "Nylon", "Alambre", "Plata"],
+        answer: "Nylon",
+        reference: "Imagen 9.png"
+      },
+      {
+        question: "¿Qué parte de la guitarra está diseñada para facilitar el agarre y la manipulación del instrumento?",
+        options: ["Cuerpo", "Mástil", "Pala", "Puente", "Clavijero"],
+        answer: "Mástil",
+        reference: "Imagen 10.png"
+      }
+    ];
+
+    function createTestQuiz() {
+      const quizContainer = document.getElementById("quizContainer");
+      quizContainer.innerHTML = '';
+      testQuestions.forEach((q, index) => {
+        const questionDiv = document.createElement("div");
+        questionDiv.className = "question-container";
+        const questionP = document.createElement("p");
+        questionP.className = "question";
+        questionP.textContent = (index + 1) + ". " + q.question;
+        questionDiv.appendChild(questionP);
+
+        const optionsDiv = document.createElement("div");
+        optionsDiv.className = "options";
+        q.options.forEach(opt => {
+          const label = document.createElement("label");
+          const radio = document.createElement("input");
+          radio.type = "radio";
+          radio.name = "q" + (index + 1);
+          radio.value = opt;
+          radio.onclick = () => {
+            questionDiv.style.border = "4px solid #4CAF50";
+          };
+          label.appendChild(radio);
+          label.appendChild(document.createTextNode(opt));
+          optionsDiv.appendChild(label);
+        });
+        questionDiv.appendChild(optionsDiv);
+
+        const referenceP = document.createElement("p");
+        referenceP.className = "reference";
+        referenceP.textContent = "Referencia: " + q.reference;
+        questionDiv.appendChild(referenceP);
+
+        quizContainer.appendChild(questionDiv);
+      });
+    }
+
+    function calificarTest() {
+      let correctas = 0;
+      const resultados = document.querySelectorAll("#test-container .question-container");
+
+      document.querySelectorAll("#test-container label").forEach(label => {
+        label.classList.remove("correct", "incorrect");
+      });
+      document.querySelectorAll("#test-container .question-container").forEach(div => {
+        div.style.border = "3px dashed #FFB74D";
+      });
+
+      resultados.forEach((div, index) => {
+        const selected = div.querySelector("input:checked");
+
+        if (selected) {
+          const correctAnswer = testQuestions[index].answer;
+          div.style.border = "4px solid #4CAF50";
+
+          if (selected.value === correctAnswer) {
+            correctas++;
+            div.querySelectorAll("label").forEach(label => {
+              if (label.textContent.trim() === correctAnswer) {
+                label.classList.add("correct");
+              }
+            });
+          }
+          else {
+            selected.parentElement.classList.add("incorrect");
+            div.querySelectorAll("label").forEach(label => {
+              if (label.textContent.trim() === correctAnswer) {
+                label.classList.add("correct");
+              }
+            });
+          }
+        } else {
+          div.style.border = "4px solid orange";
+        }
+      });
+
+      let resultText = "";
+      if (correctas < 6) { // Adjusted for a lower pass mark for encouragement
+        resultText = `¡Sigue intentándolo Paula! 💪 Has respondido bien ${correctas} de ${testQuestions.length} preguntas. ¡Repasa un poco más y lo harás genial!`;
+      } else {
+        resultText = `¡Increíble Paula! 🎉 ¡Has acertado ${correctas} de ${testQuestions.length} preguntas sobre guitarra y música! ¡Eres una estrella de rock! 😊`;
+      }
+
+      document.getElementById("resultTest").innerText = resultText;
+    }
+
+    // --- Variables y funciones para el Puzzle ---
+    const correctPuzzleMatches = {
+      "Clavijero": "Parte donde se ajustan las cuerdas para cambiar su tensión y afinar la guitarra.",
+      "Cuerdas": "Vibran para producir el sonido en la guitarra. Hechas de metal o nylon.",
+      "Diapasón": "Superficie plana sobre el mástil donde se presionan las cuerdas para cambiar la nota.",
+      "Puente": "Sujeta las cuerdas al cuerpo de la guitarra y transmite su vibración.",
+      "Caja de Resonancia": "Cuerpo hueco de la guitarra acústica que amplifica el sonido de las cuerdas."
+    };
+
+    let selectedPartPuzzleItem = null;
+    let correctPuzzlePairsCount = 0;
+    const totalPuzzlePairs = Object.keys(correctPuzzleMatches).length;
+
+    let partPuzzleItems;
+    let functionPuzzleItems;
+    let functionsPuzzleColumn;
+
+    function shufflePuzzleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function resetPuzzleFunctions() {
+      shufflePuzzleArray(functionPuzzleItems);
+      functionsPuzzleColumn.innerHTML = '<h2>Descripciones</h2>';
+      functionPuzzleItems.forEach(item => functionsPuzzleColumn.appendChild(item));
+    }
+
+    function handlePuzzlePartClick(event) {
+      resetPuzzleItemSelection(partPuzzleItems);
+      if (!event.target.classList.contains('matched')) {
+        selectedPartPuzzleItem = event.target;
+        selectedPartPuzzleItem.classList.add('selected');
+        removePuzzleIncorrectMatchClass();
+        updatePuzzleResult("");
+      } else {
+        selectedPartPuzzleItem = null;
+      }
+    }
+
+    function handlePuzzleFunctionClick(event) {
+      if (selectedPartPuzzleItem) {
+        if (!event.target.classList.contains('matched')) {
+          const selectedFunctionPuzzleItem = event.target;
+          const part = selectedPartPuzzleItem.dataset.part;
+          const functionText = selectedFunctionPuzzleItem.dataset.function;
+
+          if (correctPuzzleMatches[part] === functionText) {
+            markPuzzleCorrectMatch(selectedPartPuzzleItem, selectedFunctionPuzzleItem);
+            correctPuzzlePairsCount++;
+            updatePuzzleResult(`¡Correcto! 🎉 ¡${part} y la descripción coinciden!`);
+            if (correctPuzzlePairsCount === totalPuzzlePairs) {
+              updatePuzzleResult(`¡Felicidades Paula! 🎉 ¡Has encontrado todas las parejas musicales! ¡Eres una experta! 😊`);
+            }
+          } else {
+            markPuzzleIncorrectMatch(selectedFunctionPuzzleItem);
+            updatePuzzleResult(`¡Ups! 😔 ¡Inténtalo de nuevo! ¡Esa no es la descripción de ${part}!`);
+            setTimeout(() => {
+              removePuzzleIncorrectMatchClass();
+              resetPuzzleItemSelection(partPuzzleItems);
+              selectedPartPuzzleItem = null;
+              updatePuzzleResult("");
+            }, 1500);
+          }
+          selectedPartPuzzleItem.classList.remove('selected');
+          selectedPartPuzzleItem = null;
+        }
+      } else {
+        updatePuzzleResult("Primero selecciona un término musical.");
+      }
+    }
+
+    function markPuzzleCorrectMatch(partItem, functionItem) {
+      partItem.classList.add('matched');
+      functionItem.classList.add('matched');
+    }
+
+    function markPuzzleIncorrectMatch(functionItem) {
+      functionItem.classList.add('incorrect-match');
+    }
+
+    function removePuzzleIncorrectMatchClass() {
+      if (functionPuzzleItems) {
+        functionPuzzleItems.forEach(item => item.classList.remove('incorrect-match'));
+      }
+    }
+
+    function resetPuzzleItemSelection(items) {
+      items.forEach(item => item.classList.remove('selected'));
+    }
+
+    function updatePuzzleResult(message) {
+      document.getElementById('resultPuzzle').innerText = message;
+    }
+
+    function resetPuzzleGame() {
+      partPuzzleItems.forEach(item => {
+        item.classList.remove('matched', 'selected', 'incorrect-match');
+        item.style.opacity = 1;
+        item.style.textDecoration = 'none';
+        item.style.pointerEvents = 'auto';
+      });
+      functionPuzzleItems.forEach(item => {
+        item.classList.remove('matched', 'incorrect-match', 'selected');
+        item.style.opacity = 1;
+        item.style.textDecoration = 'none';
+        item.style.pointerEvents = 'auto';
+      });
+      resetPuzzleFunctions();
+
+      selectedPartPuzzleItem = null;
+      correctPuzzlePairsCount = 0;
+      updatePuzzleResult("");
+    }
+
+    // --- Función para mostrar el ejercicio seleccionado ---
+    function showExercise(exerciseType) {
+      document.getElementById('menu').style.display = 'none';
+      document.querySelectorAll('.exercise-container').forEach(container => {
+        container.style.display = 'none';
+      });
+
+      if (exerciseType === 'test') {
+        document.getElementById('test-container').style.display = 'block';
+        createTestQuiz();
+      } else if (exerciseType === 'puzzle') {
+        document.getElementById('puzzle-container').style.display = 'block';
+        if (!partPuzzleItems) {
+          partPuzzleItems = document.querySelectorAll('#puzzle-container .part-item');
+          functionPuzzleItems = Array.from(document.querySelectorAll('#puzzle-container .function-item'));
+          functionsPuzzleColumn = document.getElementById('functionsColumn');
+
+          partPuzzleItems.forEach(item => {
+            item.addEventListener('click', handlePuzzlePartClick);
+          });
+
+          functionPuzzleItems.forEach(item => {
+            item.addEventListener('click', handlePuzzleFunctionClick);
+          });
+        }
+        resetPuzzleGame();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!partPuzzleItems) {
+        partPuzzleItems = document.querySelectorAll('#puzzle-container .part-item');
+        functionPuzzleItems = Array.from(document.querySelectorAll('#puzzle-container .function-item'));
+        functionsPuzzleColumn = document.getElementById('functionsColumn');
+
+        partPuzzleItems.forEach(item => {
+          item.addEventListener('click', handlePuzzlePartClick);
+        });
+
+        functionPuzzleItems.forEach(item => {
+          item.addEventListener('click', handlePuzzleFunctionClick);
+        });
+
+        resetPuzzleGame();
+      }
+    });
+  </script>
+</body>
+</html>
